@@ -36,7 +36,7 @@ class Body:
         dx = self.vx * dt
         dy = self.vy * dt
 
-        # update x and y and moves the circle object
+        # update x and y and move the circle object
         self.x += dx
         self.y += dy
         #self.circle.move(dx*scale, dy*scale)  # remove circle drawing to speed up simlation
