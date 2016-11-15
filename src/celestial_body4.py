@@ -39,7 +39,7 @@ class Body:
         # update x and y and moves the circle object
         self.x += dx
         self.y += dy
-        #self.circle.move(dx*scale, dy*scale)
+        #self.circle.move(dx*scale, dy*scale)  # remove circle drawing to speed up simlation
 
     def __str__(self):  # the __str__() method is called by the print() method
         return(self.name +
