@@ -39,7 +39,7 @@ class Body:
         self.orbital_period_seconds = self.model.time_now_seconds - self.previous_orbit_start_time_seconds
         self.previous_orbit_start_time_seconds = self.model.time_now_seconds
         if self.orbit_count > 0:
-            print(self.name, "orbital_period =", "{:.2f}".format(self.get_orbital_period_earth_days()), "earth days")
+            print(self.name, "orbit_count = ", self.orbit_count, "orbital_period =", "{:.2f}".format(self.get_orbital_period_earth_days()), "earth days")
         self.orbit_count += 1
 
     def check_if_orbit_complete_and_update_orbital_period_if_so(self):
