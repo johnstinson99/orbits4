@@ -1,4 +1,5 @@
 from tkinter import *
+from src.celestial_body import Body
 
 
 class UniverseModel:
@@ -19,23 +20,22 @@ class UniverseModel:
         self.count = 0
         self.my_canvas.update()
         self.time_now_seconds = 0
-        self.barry_centre = None
-        self.centre_x = None
-        self.body_list = None
+        self.barycentre = None
+        self.centre_x = 0
+        self.body_list = []
 
-    def setup(self, barry_centre=400, body_list=[]):
+    def setup(self, body_list):
         self.body_list = body_list
-        self.barry_centre = self.get_barry_centre()
-        self.centre_x = barry_centre * UniverseModel.scale
+        self.barycentre = self.get_barycentre()
+        self.centre_x = self.barycentre * UniverseModel.scale
         for body in self.body_list:
             print(body)
 
-    def get_barry_centre(self):
-        # assumes the first two objects in the list are the heaviest
-        # assumes star1 is at x = 0 and all the ys are zero.
-        # to do. Extend to n bodies, 2 dimensions
-        star1 = self.body_list[0]
-        star2 = self.body_list[1]
+    def get_barycentre(self):
+        # Finds the barycentre of the two heaviest objects
+        sorted_body_list_largest_first = sorted(self.body_list, key=Body.mass, reverse=True)
+        star1 = sorted_body_list_largest_first[0]
+        star2 = sorted_body_list_largest_first[1]
         return (star2.mass * star2.x) / (star1.mass + star2.mass)  # BaryCentreA = (m[1]*x[1]) / (m[0]+m[1])
 
     def screen_x_from_real_x(self, real_x):

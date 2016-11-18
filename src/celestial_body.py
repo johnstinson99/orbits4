@@ -1,6 +1,3 @@
-from src.universe_model import UniverseModel
-
-
 class Body:
     def __init__(self,
                  mass=0,
@@ -45,7 +42,9 @@ class Body:
         self.orbital_period_seconds = self.model.time_now_seconds - self.previous_orbit_start_time_seconds
         self.previous_orbit_start_time_seconds = self.model.time_now_seconds
         if self.orbit_count > 0:
-            print(self.name, "orbit_count = ", self.orbit_count, "orbital_period =", "{:.2f}".format(self.get_orbital_period_earth_days()), "earth days")
+            print(self.name,
+                  "orbit_count = ", self.orbit_count,
+                  "orbital_period =", "{:.2f}".format(self.get_orbital_period_earth_days()), "earth days")
         self.orbit_count += 1
 
     def check_if_orbit_complete_and_update_orbital_period_if_so(self):
@@ -70,6 +69,10 @@ class Body:
         # self.circle.move(dx*scale, dy*scale)  # remove circle drawing to speed up simulation
 
         self.check_if_orbit_complete_and_update_orbital_period_if_so()
+
+    @staticmethod
+    def mass(my_body):
+        return my_body.mass
 
     def __str__(self):  # the __str__() method is called by the print() method
         return(self.name +
