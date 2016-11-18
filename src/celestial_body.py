@@ -35,6 +35,12 @@ class Body:
     def get_orbital_period_earth_years(self):
         return self.get_orbital_period_earth_days()/365.25
 
+    def get_luminosity(self):
+        return (self.mass / 1.989e30) ** 3
+
+    def get_habitable_distance(self):
+        return (self.get_luminosity() ** 0.5) * 1.496e11
+
     def start_new_orbit(self):
         self.orbital_period_seconds = self.model.time_now_seconds - self.previous_orbit_start_time_seconds
         self.previous_orbit_start_time_seconds = self.model.time_now_seconds

@@ -4,7 +4,7 @@ from tkinter import *
 class UniverseModel:
 
     G = 6.67408e-11  # G is the gravitational constant (as opposed to g which is gravity on earth)
-    dt = 3e4  # time simulated between two frames, in seconds - try ne4
+    dt = 3e3  # time simulated between two frames, in seconds - try ne4
     # waitTime = 1e-3  # actual time between two displayed frames - try ne-3
     scale = 4e-10  # multiplier to convert metres to pixels on screen - try ne-10
 
@@ -24,11 +24,19 @@ class UniverseModel:
         self.body_list = None
 
     def setup(self, barry_centre=400, body_list=[]):
-        self.barry_centre = barry_centre
-        self.centre_x = barry_centre * UniverseModel.scale
         self.body_list = body_list
+        self.barry_centre = self.get_barry_centre()
+        self.centre_x = barry_centre * UniverseModel.scale
         for body in self.body_list:
             print(body)
+
+    def get_barry_centre(self):
+        # assumes the first two objects in the list are the heaviest
+        # assumes star1 is at x = 0 and all the ys are zero.
+        # to do. Extend to n bodies, 2 dimensions
+        star1 = self.body_list[0]
+        star2 = self.body_list[1]
+        return (star2.mass * star2.x) / (star1.mass + star2.mass)  # BaryCentreA = (m[1]*x[1]) / (m[0]+m[1])
 
     def screen_x_from_real_x(self, real_x):
         return real_x * UniverseModel.scale + self.screen_width_pixels / 2 - self.centre_x
@@ -81,10 +89,10 @@ class UniverseModel:
             # my_body.test_method(acceleration_tuple)
             my_body.update_velocity_and_position_from_acceleration_tuple(acceleration_tuple, UniverseModel.dt)
 
-            if self.count % 30 == 0:  # draw a line every n moves
+            if self.count % 100 == 0:  # draw a line every n moves
                 self.draw_line_from_old_to_new_position(my_body)
 
-            if self.count % 2000 == 0:  # update screen every n moves
+            if self.count % 10000 == 0:  # update screen every n moves
                 self.my_canvas.update()
 
         # time.sleep(waitTime)
