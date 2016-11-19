@@ -4,19 +4,21 @@ class Body:
                  name='Body with no name yet',
                  radius=0,
                  colour='',
-                 universe_model=None):
+                 universe_model=None,
+                 x=0,
+                 y=0):
 
         self.mass = mass        # mass of body in kg
         self.name = name
         self.radius = radius    # radius of displayed bodies in pixels - for aesthetic purposes only
         self.colour = colour
         self.model = universe_model
+        self.x_old = self.x = x
+        self.y_old = self.y = y
 
         # circle has a move method, so hold onto one instance
         # of a circle and keep moving it rather than creating a new one each time.
         # self.circle = Circle(Point(0, 0), 0)
-        self.x_old = self.x = 0
-        self.y_old = self.y = 0
         self.vx_old = self.vx = 0  # velocity in x direction
         self.vy = 0  # velocity in y direction
         self.previous_orbit_start_time_seconds = 0

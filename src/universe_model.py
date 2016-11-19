@@ -1,5 +1,4 @@
 from tkinter import *
-from src.celestial_body import Body
 
 
 class UniverseModel:
@@ -10,33 +9,37 @@ class UniverseModel:
     scale = 4e-10  # multiplier to convert metres to pixels on screen - try ne-10
 
     def __init__(self, screen_width_pixels=800, screen_height_pixels=800):
-        self.centre_y = 0
         self.screen_width_pixels = screen_width_pixels
         self.screen_height_pixels = screen_height_pixels
-        master = Tk()
-        self.my_canvas = Canvas(master, width=self.screen_width_pixels, height=self.screen_height_pixels)
-        self.my_canvas.pack()
-        self.my_canvas.create_rectangle(0, 0, master.winfo_screenwidth(), master.winfo_screenheight(), fill="black")
-        self.count = 0
-        self.my_canvas.update()
+        self.body_list = []
+        self.my_canvas = None  # can only declare instance variables in __init__ but unittests don't need canvas.
         self.time_now_seconds = 0
         self.barycentre = None
         self.centre_x = 0
-        self.body_list = []
+        self.centre_y = 0
+        self.count = 0
 
     def setup(self, body_list):
-        self.body_list = body_list
+        master = Tk()
+        self.body_list = body_list  # need bodylist before calculating barycentre
+        self.my_canvas = Canvas(master, width=self.screen_width_pixels, height=self.screen_height_pixels)
+        self.my_canvas.pack()
+        self.my_canvas.create_rectangle(0, 0, master.winfo_screenwidth(), master.winfo_screenheight(), fill="black")
+        self.my_canvas.update()
         self.barycentre = self.get_barycentre()
         self.centre_x = self.barycentre * UniverseModel.scale
         for body in self.body_list:
             print(body)
 
     def get_barycentre(self):
-        # Finds the barycentre of the two heaviest objects
-        sorted_body_list_largest_first = sorted(self.body_list, key=Body.mass, reverse=True)
-        star1 = sorted_body_list_largest_first[0]
-        star2 = sorted_body_list_largest_first[1]
-        return (star2.mass * star2.x) / (star1.mass + star2.mass)  # BaryCentreA = (m[1]*x[1]) / (m[0]+m[1])
+        return UniverseModel.get_barycentre_for_body_list(self.body_list)  # done this way to make it easier to test
+
+    @staticmethod
+    def get_barycentre_for_body_list(my_list):
+        # Finds the barycentre of ALL the bodies using (m0*x0 + m1*x1 + m2*x2 ) / (m0 + m1 + m2)
+        numerator = sum(body.mass * body.x for body in my_list)
+        denominator = sum(body.mass for body in my_list)
+        return numerator/denominator
 
     def screen_x_from_real_x(self, real_x):
         return real_x * UniverseModel.scale + self.screen_width_pixels / 2 - self.centre_x
